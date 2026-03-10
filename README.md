@@ -18,18 +18,18 @@ Your AI agent can write code, run tests, search files. But it can't click a butt
 
 Ghost OS changes that. One install, and any AI agent can see and operate every app on your Mac.
 
-### What's New in v2.1.0
+### What's New &nbsp; <img src="https://img.shields.io/badge/v2.1.0-March%2010%2C%202025-brightgreen.svg" alt="v2.1.0">
 
 4 new tools. 26 total. Ghost OS can now annotate, hover, long-press, and drag.
 
-- **`ghost_annotate`** -- Take a screenshot with numbered labels on every interactive element. The agent sees [1] Button "Send", [2] Link "Inbox" with exact click coordinates. No vision model needed.
-- **`ghost_hover`** -- Move the cursor to trigger tooltips, CSS :hover effects, and dropdown menus without clicking.
-- **`ghost_long_press`** -- Press and hold for context menus, Force Touch previews, and drag initiation.
-- **`ghost_drag`** -- Drag files between folders, adjust sliders, reorder lists, select text, resize panes.
+- **`ghost_annotate`** takes a screenshot with numbered labels on every interactive element. The agent sees `[1] Button "Send"`, `[2] Link "Inbox"` with exact click coordinates. No vision model needed.
+- **`ghost_hover`** moves the cursor to trigger tooltips, CSS :hover effects, and dropdown menus without clicking.
+- **`ghost_long_press`** presses and holds for context menus, Force Touch previews, and drag initiation.
+- **`ghost_drag`** drags files between folders, adjusts sliders, reorders lists, selects text, resizes panes.
 
-<!-- TODO: demo-new-tools.gif -->
+![Ghost OS New Tools Demo](demo-new-tools.gif)
 
-Thank you to the 98 people who starred this repo. That is what keeps us building. If you want to contribute directly, we would love that -- see [CONTRIBUTING.md](CONTRIBUTING.md).
+Thank you to the 100+ people who have starred this project. You are why we keep building. If you want to contribute directly, we would love that. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```
 You:     "Send an email to sarah@company.com about the Q4 report"

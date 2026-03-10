@@ -261,12 +261,13 @@ public enum Actions {
     /// is preserved instead of wrong key-code output (e.g. "aaaaa" for Chinese).
     private static func typeViaPaste(_ text: String) throws {
         let pasteboard = NSPasteboard.general
-        pasteboard.clearContents()
         let oldString = pasteboard.string(forType: .string)
+        pasteboard.clearContents()
         guard pasteboard.setString(text, forType: .string) else {
             throw NSError(domain: "Actions", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to set pasteboard"])
         }
         defer {
+            Thread.sleep(forTimeInterval: 0.05)
             pasteboard.clearContents()
             if let oldString { pasteboard.setString(oldString, forType: .string) }
         }

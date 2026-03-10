@@ -590,6 +590,289 @@ public enum Actions {
         }
     }
 
+    // MARK: - ghost_hover
+
+    /// Move cursor to an element or coordinates without clicking.
+    /// Triggers hover effects: tooltips, CSS :hover, menu navigation.
+    public static func hover(
+        query: String?,
+        role: String?,
+        domId: String?,
+        appName: String?,
+        x: Double?,
+        y: Double?
+    ) -> ToolResult {
+        // Coordinate-based hover
+        if let x, let y {
+            if let appName {
+                _ = FocusManager.focus(appName: appName)
+                Thread.sleep(forTimeInterval: 0.2)
+            }
+            do {
+                try InputDriver.move(to: CGPoint(x: x, y: y))
+                return ToolResult(success: true, data: ["method": "coordinate", "x": x, "y": y])
+            } catch {
+                return ToolResult(success: false, error: "Hover at (\(Int(x)), \(Int(y))) failed: \(error)")
+            }
+        }
+
+        // Element-based hover needs query or domId
+        guard query != nil || domId != nil else {
+            return ToolResult(
+                success: false,
+                error: "Either query/dom_id or x/y coordinates required",
+                suggestion: "Use ghost_find to locate elements, or ghost_element_at for coordinates"
+            )
+        }
+
+        let locator = LocatorBuilder.build(query: query, role: role, domId: domId)
+        let element = findElement(locator: locator, appName: appName)
+
+        guard let element else {
+            return ToolResult(
+                success: false,
+                error: "Element '\(query ?? domId ?? "")' not found in \(appName ?? "frontmost app")",
+                suggestion: "Use ghost_find to see what elements are available"
+            )
+        }
+
+        guard let frame = element.frame() else {
+            return ToolResult(
+                success: false,
+                error: "Element '\(element.computedName() ?? query ?? "")' has no frame",
+                suggestion: "Element may be off-screen. Use ghost_inspect to check."
+            )
+        }
+
+        let center = CGPoint(x: frame.midX, y: frame.midY)
+
+        if let appName {
+            _ = FocusManager.focus(appName: appName)
+            Thread.sleep(forTimeInterval: 0.2)
+        }
+
+        do {
+            try InputDriver.move(to: center)
+            return ToolResult(
+                success: true,
+                data: [
+                    "method": "element",
+                    "element": element.computedName() ?? query ?? "",
+                    "x": center.x, "y": center.y,
+                ]
+            )
+        } catch {
+            return ToolResult(success: false, error: "Hover failed: \(error)")
+        }
+    }
+
+    // MARK: - ghost_long_press
+
+    /// Press and hold at an element or coordinates for a duration.
+    /// Triggers long-press menus, Force Touch previews, drag initiation.
+    public static func longPress(
+        query: String?,
+        role: String?,
+        domId: String?,
+        appName: String?,
+        x: Double?,
+        y: Double?,
+        duration: Double?,
+        button: String?
+    ) -> ToolResult {
+        let holdDuration = min(duration ?? 1.0, 10.0)
+        let mouseButton: MouseButton = (button == "right") ? .right : .left
+
+        // Resolve target point
+        let targetPoint: CGPoint
+
+        if let x, let y {
+            targetPoint = CGPoint(x: x, y: y)
+        } else if query != nil || domId != nil {
+            let locator = LocatorBuilder.build(query: query, role: role, domId: domId)
+            guard let element = findElement(locator: locator, appName: appName) else {
+                return ToolResult(
+                    success: false,
+                    error: "Element '\(query ?? domId ?? "")' not found in \(appName ?? "frontmost app")",
+                    suggestion: "Use ghost_find to see what elements are available"
+                )
+            }
+            guard let frame = element.frame() else {
+                return ToolResult(
+                    success: false,
+                    error: "Element '\(element.computedName() ?? query ?? "")' has no frame",
+                    suggestion: "Element may be off-screen. Use ghost_inspect to check."
+                )
+            }
+            targetPoint = CGPoint(x: frame.midX, y: frame.midY)
+        } else {
+            return ToolResult(
+                success: false,
+                error: "Either query/dom_id or x/y coordinates required",
+                suggestion: "Use ghost_find to locate elements, or ghost_element_at for coordinates"
+            )
+        }
+
+        if let appName {
+            _ = FocusManager.focus(appName: appName)
+            Thread.sleep(forTimeInterval: 0.2)
+        }
+
+        do {
+            try InputDriver.pressHold(at: targetPoint, button: mouseButton, duration: holdDuration)
+            Thread.sleep(forTimeInterval: 0.15)
+            return ToolResult(
+                success: true,
+                data: [
+                    "method": (query != nil || domId != nil) ? "element" : "coordinate",
+                    "x": targetPoint.x, "y": targetPoint.y,
+                    "duration": holdDuration, "button": button ?? "left",
+                ]
+            )
+        } catch {
+            return ToolResult(
+                success: false,
+                error: "Long press at (\(Int(targetPoint.x)), \(Int(targetPoint.y))) failed: \(error)"
+            )
+        }
+    }
+
+    // MARK: - ghost_drag
+
+    /// Drag from one point to another. Posts mouseDown, holds briefly for grab
+    /// registration, interpolates drag steps, then posts mouseUp.
+    public static func drag(
+        query: String?,
+        role: String?,
+        domId: String?,
+        appName: String?,
+        fromX: Double?,
+        fromY: Double?,
+        toX: Double,
+        toY: Double,
+        duration: Double?,
+        holdDuration: Double?
+    ) -> ToolResult {
+        // Resolve start point
+        let startPoint: CGPoint
+
+        if let fromX, let fromY {
+            startPoint = CGPoint(x: fromX, y: fromY)
+        } else if query != nil || domId != nil {
+            let locator = LocatorBuilder.build(query: query, role: role, domId: domId)
+            guard let element = findElement(locator: locator, appName: appName) else {
+                return ToolResult(
+                    success: false,
+                    error: "Drag source '\(query ?? domId ?? "")' not found in \(appName ?? "frontmost app")",
+                    suggestion: "Use ghost_find to locate the element, or provide from_x/from_y coordinates"
+                )
+            }
+            guard let frame = element.frame() else {
+                return ToolResult(
+                    success: false,
+                    error: "Drag source '\(query ?? domId ?? "")' has no frame",
+                    suggestion: "Use ghost_inspect to check the element, or provide from_x/from_y coordinates"
+                )
+            }
+            startPoint = CGPoint(x: frame.midX, y: frame.midY)
+        } else {
+            return ToolResult(
+                success: false,
+                error: "Drag source required: provide query/dom_id or from_x/from_y",
+                suggestion: "Use ghost_find to locate elements, or ghost_element_at for coordinates"
+            )
+        }
+
+        let endPoint = CGPoint(x: toX, y: toY)
+
+        // Focus the app for synthetic input
+        if let appName {
+            _ = FocusManager.focus(appName: appName)
+            Thread.sleep(forTimeInterval: 0.2)
+        }
+
+        // Compute drag parameters
+        let clampedDuration = min(10.0, max(0.1, duration ?? 0.5))
+        let steps = max(10, Int(clampedDuration * 60))
+        let interStepDelay = clampedDuration / Double(steps)
+        let clampedHold = min(5.0, max(0.0, holdDuration ?? 0.1))
+
+        // Inlined rather than calling InputDriver.drag() because:
+        // 1. We need hold-before-drag (InputDriver doesn't support it)
+        // 2. InputDriver.drag() hardcodes .leftMouseDragged for all button types
+
+        // 1. Mouse down at start
+        guard let downEvent = CGEvent(
+            mouseEventSource: nil,
+            mouseType: .leftMouseDown,
+            mouseCursorPosition: startPoint,
+            mouseButton: .left
+        ) else {
+            return ToolResult(success: false, error: "Failed to create mouse down event")
+        }
+        downEvent.post(tap: .cghidEventTap)
+
+        // 2. Hold for grab registration
+        if clampedHold > 0 {
+            Thread.sleep(forTimeInterval: clampedHold)
+        }
+
+        // 3. Drag steps (linear interpolation)
+        for i in 1...steps {
+            let t = CGFloat(i) / CGFloat(steps)
+            let pos = CGPoint(
+                x: startPoint.x + (endPoint.x - startPoint.x) * t,
+                y: startPoint.y + (endPoint.y - startPoint.y) * t
+            )
+            if let dragEvent = CGEvent(
+                mouseEventSource: nil,
+                mouseType: .leftMouseDragged,
+                mouseCursorPosition: pos,
+                mouseButton: .left
+            ) {
+                dragEvent.post(tap: .cghidEventTap)
+            }
+            if interStepDelay > 0 {
+                Thread.sleep(forTimeInterval: interStepDelay)
+            }
+        }
+
+        // 4. Mouse up at end
+        guard let upEvent = CGEvent(
+            mouseEventSource: nil,
+            mouseType: .leftMouseUp,
+            mouseCursorPosition: endPoint,
+            mouseButton: .left
+        ) else {
+            Log.error("Drag: mouseUp event creation failed — mouse may be stuck in pressed state")
+            return ToolResult(
+                success: false,
+                data: [
+                    "from": ["x": Int(startPoint.x), "y": Int(startPoint.y)],
+                    "to": ["x": Int(endPoint.x), "y": Int(endPoint.y)],
+                    "warning": "mouseUp_failed",
+                ],
+                error: "Drag completed but mouseUp failed — mouse may be stuck. Click anywhere to recover."
+            )
+        }
+        upEvent.post(tap: .cghidEventTap)
+
+        // 5. Settle time
+        Thread.sleep(forTimeInterval: 0.15)
+
+        Log.info("Drag from (\(Int(startPoint.x)),\(Int(startPoint.y))) to (\(Int(endPoint.x)),\(Int(endPoint.y))) - \(steps) steps in \(clampedDuration)s")
+
+        return ToolResult(
+            success: true,
+            data: [
+                "method": query != nil || domId != nil ? "element-to-coordinate" : "coordinate",
+                "from": ["x": Int(startPoint.x), "y": Int(startPoint.y)],
+                "to": ["x": Int(endPoint.x), "y": Int(endPoint.y)],
+                "steps": steps, "duration": clampedDuration,
+            ]
+        )
+    }
+
     // MARK: - ghost_window
 
     /// Window management operations.

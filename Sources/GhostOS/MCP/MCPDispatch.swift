@@ -25,10 +25,12 @@ public enum MCPDispatch {
         let startTime = DispatchTime.now()
         Log.info("Tool call: \(toolName)")
 
-        // Screenshot returns MCP image content directly (not text-wrapped JSON)
+        // Screenshot and annotate return MCP image content directly (not text-wrapped JSON)
         let response: [String: Any]
         if toolName == "ghost_screenshot" {
             response = handleScreenshot(args)
+        } else if toolName == "ghost_annotate" {
+            response = handleAnnotate(args)
         } else {
             let result = dispatch(tool: toolName, args: args)
             response = formatResult(result, toolName: toolName)
@@ -77,6 +79,48 @@ public enum MCPDispatch {
                 [
                     "type": "text",
                     "text": caption,
+                ] as [String: Any],
+            ] as [[String: Any]],
+            "isError": false,
+        ]
+    }
+
+    /// Annotate handler returns MCP image + text index for labeled screenshots.
+    private static func handleAnnotate(_ args: [String: Any]) -> [String: Any] {
+        let rolesArray = args["roles"] as? [String]
+        let result = Annotate.annotate(
+            appName: str(args, "app"),
+            roles: rolesArray,
+            maxLabels: int(args, "max_labels")
+        )
+
+        guard result.success,
+              let data = result.data,
+              let base64 = data["annotated_image"] as? String,
+              let index = data["index"] as? String
+        else {
+            return formatResult(result, toolName: "ghost_annotate")
+        }
+
+        let mimeType = data["mime_type"] as? String ?? "image/png"
+        let width = data["width"] as? Int ?? 0
+        let height = data["height"] as? Int ?? 0
+        let elementCount = data["element_count"] as? Int ?? 0
+        let windowTitle = data["window_title"] as? String ?? ""
+
+        var caption = "Annotated screenshot: \(width)x\(height), \(elementCount) labeled elements"
+        if !windowTitle.isEmpty { caption += " — \(windowTitle)" }
+
+        return [
+            "content": [
+                [
+                    "type": "image",
+                    "data": base64,
+                    "mimeType": mimeType,
+                ] as [String: Any],
+                [
+                    "type": "text",
+                    "text": caption + "\n\n" + index,
                 ] as [String: Any],
             ] as [[String: Any]],
             "isError": false,
@@ -165,12 +209,12 @@ public enum MCPDispatch {
                 )
             }
 
-        // Press, hotkey, scroll are synthetic input tools that send events to the
-        // FRONTMOST app. They need the target app to STAY focused after the tool
-        // returns - the agent will call ghost_focus to restore when ready.
-        // Do NOT wrap these in withFocusRestore, which would steal focus back
-        // before the app processes the event (e.g. Cmd+L needs Chrome to stay
-        // focused while it selects the address bar text).
+        // Press, hotkey, scroll, hover, long_press, drag are synthetic input tools
+        // that send events to the FRONTMOST app. They need the target app to STAY
+        // focused after the tool returns — the agent will call ghost_focus to
+        // restore when ready. Do NOT wrap these in withFocusRestore, which would
+        // steal focus back before the app processes the event (e.g. Cmd+L needs
+        // Chrome to stay focused while it selects the address bar text).
         case "ghost_press":
             guard let key = str(args, "key") else {
                 return ToolResult(success: false, error: "Missing required parameter: key")
@@ -194,6 +238,47 @@ public enum MCPDispatch {
                 appName: str(args, "app"),
                 x: double(args, "x"),
                 y: double(args, "y")
+            )
+
+        case "ghost_hover":
+            return Actions.hover(
+                query: str(args, "query"),
+                role: str(args, "role"),
+                domId: str(args, "dom_id"),
+                appName: str(args, "app"),
+                x: double(args, "x"),
+                y: double(args, "y")
+            )
+
+        case "ghost_long_press":
+            return Actions.longPress(
+                query: str(args, "query"),
+                role: str(args, "role"),
+                domId: str(args, "dom_id"),
+                appName: str(args, "app"),
+                x: double(args, "x"),
+                y: double(args, "y"),
+                duration: double(args, "duration"),
+                button: str(args, "button")
+            )
+
+        case "ghost_drag":
+            guard let toX = double(args, "to_x"),
+                  let toY = double(args, "to_y")
+            else {
+                return ToolResult(success: false, error: "Missing required parameters: to_x, to_y")
+            }
+            return Actions.drag(
+                query: str(args, "query"),
+                role: str(args, "role"),
+                domId: str(args, "dom_id"),
+                appName: str(args, "app"),
+                fromX: double(args, "from_x"),
+                fromY: double(args, "from_y"),
+                toX: toX,
+                toY: toY,
+                duration: double(args, "duration"),
+                holdDuration: double(args, "hold_duration")
             )
 
         case "ghost_focus":

@@ -18,6 +18,19 @@ Your AI agent can write code, run tests, search files. But it can't click a butt
 
 Ghost OS changes that. One install, and any AI agent can see and operate every app on your Mac.
 
+### What's New in v2.1.0
+
+4 new tools. 26 total. Ghost OS can now annotate, hover, long-press, and drag.
+
+- **`ghost_annotate`** -- Take a screenshot with numbered labels on every interactive element. The agent sees [1] Button "Send", [2] Link "Inbox" with exact click coordinates. No vision model needed.
+- **`ghost_hover`** -- Move the cursor to trigger tooltips, CSS :hover effects, and dropdown menus without clicking.
+- **`ghost_long_press`** -- Press and hold for context menus, Force Touch previews, and drag initiation.
+- **`ghost_drag`** -- Drag files between folders, adjust sliders, reorder lists, select text, resize panes.
+
+<!-- TODO: demo-new-tools.gif -->
+
+Thank you to the 98 people who starred this repo. That is what keeps us building. If you want to contribute directly, we would love that -- see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ```
 You:     "Send an email to sarah@company.com about the Q4 report"
 Agent:   ghost_run recipe:"gmail-send" params:{recipient, subject, body}
@@ -73,7 +86,7 @@ That's it. `ghost setup` handles permissions, MCP configuration, recipe installa
 Homebrew has a known issue on macOS developer betas where it demands an Xcode version that doesn't exist yet. If `brew install` fails, install directly:
 
 ```bash
-curl -sL https://github.com/ghostwright/ghost-os/releases/latest/download/ghost-os-2.0.5-macos-arm64.tar.gz | tar xz
+curl -sL https://github.com/ghostwright/ghost-os/releases/latest/download/ghost-os-2.1.0-macos-arm64.tar.gz | tar xz
 sudo cp ghost /opt/homebrew/bin/
 sudo cp ghost-vision /opt/homebrew/bin/
 sudo mkdir -p /opt/homebrew/share/ghost-os
@@ -87,7 +100,7 @@ ghost setup
 
 ## How It Works
 
-Ghost OS connects to your AI agent through [MCP](https://modelcontextprotocol.io) and gives it 22 tools to see and operate your Mac. It reads the macOS accessibility tree for structured data about every app. For web apps where the AX tree falls short (Gmail, Slack), a local vision model (ShowUI-2B) finds elements visually. Click, type, scroll, press keys, manage windows. Any app, not just browsers.
+Ghost OS connects to your AI agent through [MCP](https://modelcontextprotocol.io) and gives it 26 tools to see and operate your Mac. It reads the macOS accessibility tree for structured data about every app. For web apps where the AX tree falls short (Gmail, Slack), a local vision model (ShowUI-2B) finds elements visually. Click, type, hover, drag, scroll, press keys, manage windows. Any app, not just browsers.
 
 ```
 You:     "Download the latest paper on chain-of-thought prompting from arXiv"
@@ -115,7 +128,7 @@ ghost_run recipe:"gmail-send" params:{"recipient":"hello@example.com","subject":
 - Chain recipes together. The agent knows when to call what.
 - Write once with Claude or GPT-4. Run forever with Haiku.
 
-## 22 Tools
+## 26 Tools
 
 | | Tool | What it does |
 |:---:|------|-------------|
@@ -126,9 +139,13 @@ ghost_run recipe:"gmail-send" params:{"recipient":"hello@example.com","subject":
 | 🔍 | `ghost_inspect` | Get complete metadata for one element: role, position, actions, DOM id, editable state |
 | 🔍 | `ghost_element_at` | Identify what element is at a specific screen coordinate |
 | 📸 | `ghost_screenshot` | Capture a window screenshot for visual debugging |
+| 📸 | `ghost_annotate` | Screenshot with numbered labels on interactive elements and click coordinates |
 | 👁️ | `ghost_ground` | Find element coordinates using vision (ShowUI-2B). Works when AX tree can't find web elements |
 | 👁️ | `ghost_parse_screen` | Detect all interactive elements via vision |
 | 🎯 | `ghost_click` | Click an element by name, DOM id, or screen coordinates |
+| 🎯 | `ghost_hover` | Move cursor to an element or position to trigger tooltips and hover effects |
+| 🎯 | `ghost_long_press` | Press and hold for context menus, Force Touch previews, and drag initiation |
+| 🎯 | `ghost_drag` | Drag from one point to another for file moves, sliders, list reordering, text selection |
 | ⌨️ | `ghost_type` | Type text into a specific field by name, or at the current cursor |
 | ⌨️ | `ghost_press` | Press a single key like Return, Tab, Escape, or arrow keys |
 | ⌨️ | `ghost_hotkey` | Press key combinations like Cmd+L, Cmd+Return, Cmd+Shift+P |
@@ -187,7 +204,7 @@ Ghost OS MCP Server (Swift)
     └── AXorcist ────── macOS accessibility engine
 ```
 
-~5,000 lines of Swift + Python vision sidecar. Built on [AXorcist](https://github.com/steipete/AXorcist) by [@steipete](https://github.com/steipete).
+~6,000 lines of Swift + Python vision sidecar. Built on [AXorcist](https://github.com/steipete/AXorcist) by [@steipete](https://github.com/steipete).
 
 ## Contributing
 

@@ -10,7 +10,9 @@ public enum MCPTools {
 
     /// All tool definitions as MCP-compatible dictionaries.
     public static func definitions() -> [[String: Any]] {
-        perception + actions + wait + recipes + vision
+        var all = perception + actions + wait
+        all += recipes + vision + annotate
+        return all
     }
 
     // MARK: - Perception Tools (7)
@@ -82,7 +84,7 @@ public enum MCPTools {
         ),
     ]
 
-    // MARK: - Action Tools (7)
+    // MARK: - Action Tools (10)
 
     private static let actions: [[String: Any]] = [
         tool(
@@ -141,6 +143,49 @@ public enum MCPTools {
                 "y": prop("number", "Scroll at specific Y position."),
             ],
             required: ["direction"]
+        ),
+        tool(
+            name: "ghost_hover",
+            description: "Move cursor to an element or position WITHOUT clicking. Triggers tooltips, CSS :hover, menu navigation. Use ghost_read after to see what appeared.",
+            properties: [
+                "query": prop("string", "Element to hover over (centers cursor on element)."),
+                "role": prop("string", "AX role filter."),
+                "dom_id": prop("string", "Hover by DOM id."),
+                "app": prop("string", "Which app (auto-focuses — hover effects need focus)."),
+                "x": prop("number", "Hover at X coordinate instead of element."),
+                "y": prop("number", "Hover at Y coordinate."),
+            ]
+        ),
+        tool(
+            name: "ghost_long_press",
+            description: "Press and hold at a position for a duration. Triggers long-press menus, Force Touch previews, and drag-initiation behaviors.",
+            properties: [
+                "query": prop("string", "Element to long-press (centers on element)."),
+                "role": prop("string", "AX role filter."),
+                "dom_id": prop("string", "Long-press by DOM id."),
+                "app": prop("string", "Which app (auto-focuses)."),
+                "x": prop("number", "Long-press at X coordinate."),
+                "y": prop("number", "Long-press at Y coordinate."),
+                "duration": prop("number", "Hold duration in seconds (default: 1.0)."),
+                "button": prop("string", "left (default) or right."),
+            ]
+        ),
+        tool(
+            name: "ghost_drag",
+            description: "Drag from one point to another (left-button only). Find source element by query or specify coordinates. Use for: moving files, adjusting sliders, reordering lists, selecting text, resizing panes.",
+            properties: [
+                "from_x": prop("number", "Start X coordinate (logical screen points)."),
+                "from_y": prop("number", "Start Y coordinate."),
+                "to_x": prop("number", "End X coordinate (logical screen points)."),
+                "to_y": prop("number", "End Y coordinate."),
+                "query": prop("string", "Element to drag (finds center as start point). Alternative to from_x/from_y."),
+                "role": prop("string", "AX role filter when using query."),
+                "dom_id": prop("string", "Find drag source by DOM id."),
+                "app": prop("string", "Which app (auto-focuses for synthetic input)."),
+                "duration": prop("number", "Drag duration in seconds (default: 0.5). Longer = smoother/more reliable."),
+                "hold_duration": prop("number", "Seconds to hold at start before moving (default: 0.1). Increase for Finder file drags."),
+            ],
+            required: ["to_x", "to_y"]
         ),
         tool(
             name: "ghost_focus",
@@ -247,6 +292,20 @@ public enum MCPTools {
                 "crop_box": propArray("number", "Optional crop region [x1, y1, x2, y2] in logical points. Dramatically improves accuracy for overlapping panels (e.g. compose popup over inbox)."),
             ],
             required: ["description"]
+        ),
+    ]
+
+    // MARK: - Annotate Tool (1)
+
+    private static let annotate: [[String: Any]] = [
+        tool(
+            name: "ghost_annotate",
+            description: "Screenshot with numbered labels [1], [2], [3]... on interactive UI elements. Returns an annotated image and a text index mapping each label to its element's role, name, and click coordinates. Call this for visual orientation, then use ghost_click with the x/y from the index. Zero ML — instant, uses the accessibility tree.",
+            properties: [
+                "app": prop("string", "App to annotate. If omitted, uses frontmost app."),
+                "roles": propArray("string", "AX roles to include (default: buttons, links, fields, checkboxes, combos, tabs, sliders). Example: [\"AXButton\", \"AXLink\"]."),
+                "max_labels": prop("integer", "Maximum number of labels (default: 50, max: 100). Lower values reduce clutter."),
+            ]
         ),
     ]
 

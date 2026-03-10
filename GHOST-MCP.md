@@ -5,6 +5,9 @@ through the accessibility tree AND visual perception. Every button, text field,
 link, and label is available -- either through the AX tree (native apps) or
 vision-based grounding (web apps where Chrome exposes everything as AXGroup).
 
+You have 26 tools: perceive the screen, click, type, hover, drag, long-press,
+scroll, press keys, manage windows, wait for conditions, and run saved recipes.
+
 ## Rule 1: Always Check Recipes First
 
 Before doing ANY multi-step task manually, call `ghost_recipes`.
@@ -46,10 +49,10 @@ error -- you cannot capture what does not exist.
 **Click and type try AX-native first** (no focus), then synthetic fallback (auto-focuses):
 - ghost_click, ghost_type
 
-**Press, hotkey, scroll need focus** - always pass the `app` parameter:
-- ghost_press, ghost_hotkey, ghost_scroll
+**Press, hotkey, scroll, hover, long_press, drag need focus** - always pass the `app` parameter:
+- ghost_press, ghost_hotkey, ghost_scroll, ghost_hover, ghost_long_press, ghost_drag
 
-Focus is automatically saved and restored after action tools.
+Focus is automatically saved and restored after click and type. Other action tools leave the target app focused.
 
 ## Rule 5: Key Patterns
 
@@ -67,6 +70,26 @@ ghost_click query:"Compose" app:"Chrome"    -> click button
 ghost_type text:"hello@example.com" into:"To" app:"Chrome"
 ghost_press key:"tab" app:"Chrome"          -> move to next field
 ghost_type text:"Subject line" into:"Subject" app:"Chrome"
+```
+
+### Annotate for visual orientation
+```
+ghost_annotate app:"Chrome"
+-> Returns labeled screenshot + text index
+-> [1] Button "Send" — click: (620, 350)
+-> Use ghost_click x:620 y:350 to click any labeled element
+```
+
+### Hover to reveal tooltips or menus
+```
+ghost_hover query:"Help" app:"Preview"
+ghost_hover x:500 y:300 app:"Chrome"
+```
+
+### Drag files, sliders, or list items
+```
+ghost_drag query:"document.pdf" to_x:500 to_y:300 app:"Finder"
+ghost_drag from_x:200 from_y:400 to_x:600 to_y:400 app:"Finder"
 ```
 
 ### Wait instead of guessing
@@ -115,9 +138,10 @@ AX-based element search, and ghost_ground for visual element finding.
 
 If an action fails:
 1. Call `ghost_context` to see current state
-2. Call `ghost_screenshot` for visual confirmation
-3. Try `ghost_ground` with a description of what you need to click
-4. Try a different approach (different query, coordinates, etc.)
+2. Call `ghost_annotate` for a labeled screenshot showing every interactive element with click coordinates
+3. Call `ghost_screenshot` for raw visual confirmation
+4. Try `ghost_ground` with a description of what you need to click
+5. Try a different approach (different query, coordinates, etc.)
 
 Don't retry the same thing 5 times. If ghost_click fails, it already tried
 AX-native, synthetic, AND VLM vision grounding. The element might not exist,
@@ -208,8 +232,12 @@ Common wait conditions:
 | ghost_inspect | Full element metadata | No |
 | ghost_element_at | What's at these coordinates? | No |
 | ghost_screenshot | Visual capture for debugging | No |
+| ghost_annotate | Labeled screenshot with click coordinates | No |
 | ghost_click | Click element or coordinates | Auto |
 | ghost_type | Type text, optionally into a field | Auto |
+| ghost_hover | Move cursor to trigger tooltips/hover effects | Yes - use `app` |
+| ghost_long_press | Press and hold for context menus | Yes - use `app` |
+| ghost_drag | Drag between points or elements | Yes - use `app` |
 | ghost_press | Press single key | Yes - use `app` |
 | ghost_hotkey | Key combo (cmd+s, etc.) | Yes - use `app` |
 | ghost_scroll | Scroll content | Yes - use `app` |

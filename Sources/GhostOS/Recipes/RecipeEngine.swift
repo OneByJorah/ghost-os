@@ -314,6 +314,49 @@ public enum RecipeEngine {
                 y: params["y"].flatMap(Double.init)
             )
 
+        case "hover":
+            let query = step.target?.computedNameContains ?? params["query"] ?? params["target"]
+            let role = step.target?.criteria.first(where: { $0.attribute == "AXRole" })?.value
+            let domId = step.target?.criteria.first(where: { $0.attribute == "AXDOMIdentifier" })?.value
+            return Actions.hover(
+                query: query, role: role, domId: domId,
+                appName: stepApp,
+                x: params["x"].flatMap(Double.init),
+                y: params["y"].flatMap(Double.init)
+            )
+
+        case "long_press":
+            let query = step.target?.computedNameContains ?? params["query"] ?? params["target"]
+            let role = step.target?.criteria.first(where: { $0.attribute == "AXRole" })?.value
+            let domId = step.target?.criteria.first(where: { $0.attribute == "AXDOMIdentifier" })?.value
+            return Actions.longPress(
+                query: query, role: role, domId: domId,
+                appName: stepApp,
+                x: params["x"].flatMap(Double.init),
+                y: params["y"].flatMap(Double.init),
+                duration: params["duration"].flatMap(Double.init),
+                button: params["button"]
+            )
+
+        case "drag":
+            let query = step.target?.computedNameContains ?? params["query"] ?? params["target"]
+            let role = step.target?.criteria.first(where: { $0.attribute == "AXRole" })?.value
+            let domId = step.target?.criteria.first(where: { $0.attribute == "AXDOMIdentifier" })?.value
+            guard let toX = params["to_x"].flatMap(Double.init),
+                  let toY = params["to_y"].flatMap(Double.init)
+            else {
+                return ToolResult(success: false, error: "Step \(step.id): 'drag' action requires 'to_x' and 'to_y' params")
+            }
+            return Actions.drag(
+                query: query, role: role, domId: domId,
+                appName: stepApp,
+                fromX: params["from_x"].flatMap(Double.init),
+                fromY: params["from_y"].flatMap(Double.init),
+                toX: toX, toY: toY,
+                duration: params["duration"].flatMap(Double.init),
+                holdDuration: params["hold_duration"].flatMap(Double.init)
+            )
+
         case "wait":
             // Inline wait step (not wait_after)
             guard let condition = params["condition"] else {
@@ -331,7 +374,7 @@ public enum RecipeEngine {
             return ToolResult(
                 success: false,
                 error: "Unknown recipe action: '\(step.action)'",
-                suggestion: "Valid actions: click, type, press, hotkey, focus, scroll, wait"
+                suggestion: "Valid actions: click, type, press, hotkey, focus, scroll, hover, long_press, drag, wait"
             )
         }
     }

@@ -86,7 +86,7 @@ That's it. `ghost setup` handles permissions, MCP configuration, recipe installa
 Homebrew has a known issue on macOS developer betas where it demands an Xcode version that doesn't exist yet. If `brew install` fails, install directly:
 
 ```bash
-curl -sL https://github.com/ghostwright/ghost-os/releases/latest/download/ghost-os-2.1.0-macos-arm64.tar.gz | tar xz
+curl -sL https://github.com/ghostwright/ghost-os/releases/latest/download/ghost-os-2.1.1-macos-arm64.tar.gz | tar xz
 sudo cp ghost /opt/homebrew/bin/
 sudo cp ghost-vision /opt/homebrew/bin/
 sudo mkdir -p /opt/homebrew/share/ghost-os

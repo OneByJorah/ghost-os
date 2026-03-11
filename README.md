@@ -18,7 +18,7 @@ Your AI agent can write code, run tests, search files. But it can't click a butt
 
 Ghost OS changes that. One install, and any AI agent can see and operate every app on your Mac.
 
-### What's New &nbsp; <img src="https://img.shields.io/badge/v2.1.0-March%2010%2C%202025-brightgreen.svg" alt="v2.1.0">
+### What's New &nbsp; <img src="https://img.shields.io/badge/v2.1.1-March%2010%2C%202026-brightgreen.svg" alt="v2.1.1">
 
 4 new tools. 26 total. Ghost OS can now annotate, hover, long-press, and drag.
 
@@ -29,7 +29,9 @@ Ghost OS changes that. One install, and any AI agent can see and operate every a
 
 ![Ghost OS New Tools Demo](demo-new-tools.gif)
 
-Thank you to the 100+ people who have starred this project. You are why we keep building. If you want to contribute directly, we would love that. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Also in v2.1.1: fixed vision model download for new users, and Chinese/CJK input support (thanks [@junshi5218](https://github.com/junshi5218)).
+
+Thank you to the 300+ people who have starred this project. You are why we keep building. If you want to contribute directly, we would love that. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```
 You:     "Send an email to sarah@company.com about the Q4 report"

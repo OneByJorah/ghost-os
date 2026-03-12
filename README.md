@@ -18,7 +18,7 @@ Your AI agent can write code, run tests, search files. But it can't click a butt
 
 Ghost OS changes that. One install, and any AI agent can see and operate every app on your Mac.
 
-### What's New &nbsp; <img src="https://img.shields.io/badge/v2.2.0-March%202026-brightgreen.svg" alt="v2.2.0">
+### What's New &nbsp; <img src="https://img.shields.io/badge/v2.2.1-March%202026-brightgreen.svg" alt="v2.2.1">
 
 **Self-learning recipes.** Show Ghost OS how to do something once, and it remembers forever.
 
@@ -51,7 +51,7 @@ Requires Input Monitoring permission (System Settings > Privacy & Security > Inp
 
 </details>
 
-Thank you to the 300+ people who have starred this project. You are why we keep building. If you want to contribute directly, we would love that. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Thank you to the 500+ people who have starred this project. You are why we keep building. If you want to contribute directly, we would love that. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```
 You:     "Send an email to sarah@company.com about the Q4 report"
@@ -108,7 +108,7 @@ That's it. `ghost setup` handles permissions, MCP configuration, recipe installa
 Homebrew has a known issue on macOS developer betas where it demands an Xcode version that doesn't exist yet. If `brew install` fails, install directly:
 
 ```bash
-curl -sL https://github.com/ghostwright/ghost-os/releases/latest/download/ghost-os-2.2.0-macos-arm64.tar.gz | tar xz
+curl -sL https://github.com/ghostwright/ghost-os/releases/latest/download/ghost-os-2.2.1-macos-arm64.tar.gz | tar xz
 sudo cp ghost /opt/homebrew/bin/
 sudo cp ghost-vision /opt/homebrew/bin/
 sudo mkdir -p /opt/homebrew/share/ghost-os
@@ -230,7 +230,7 @@ Ghost OS MCP Server (Swift)
     └── AXorcist ────── macOS accessibility engine
 ```
 
-~6,000 lines of Swift + Python vision sidecar. Built on [AXorcist](https://github.com/steipete/AXorcist) by [@steipete](https://github.com/steipete).
+~7,000 lines of Swift + Python vision sidecar. Built on [AXorcist](https://github.com/steipete/AXorcist) by [@steipete](https://github.com/steipete).
 
 ## Contributing
 

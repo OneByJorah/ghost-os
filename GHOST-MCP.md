@@ -377,9 +377,12 @@ structured object on any step with `timeout` as a **number**. See the bundled
 - `matchAll` -- boolean, whether all criteria must match (default: true)
 
 **wait_after fields:**
-- `condition` -- one of: `elementExists`, `elementGone`, `urlContains`, `titleContains`, `delay`
-- `value` -- string to match against (not needed for `delay`)
+- `condition` -- one of: `elementExists`, `elementGone`, `urlContains`, `titleContains`, `urlChanged`, `titleChanged`, `delay`
+- `value` -- string to match against (not needed for `delay`, `urlChanged`, or `titleChanged`)
+- `target` -- optional Locator; if `value` is nil, falls back to `target.computedNameContains`
 - `timeout` -- number (seconds, default: 10). For `delay`, this is the sleep duration.
+
+The same conditions work for standalone `wait` steps (pass as `params.condition`).
 
 **Param definitions** (top-level `params` object):
 - Each key is the parameter name

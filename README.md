@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="logo-animated.gif" width="120" alt="Ghost OS">
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/ghostwright/shadow"><img src="https://raw.githubusercontent.com/ghostwright/shadow/main/logo.svg" width="120" alt="Shadow"></a>
+  <img src="logo-animated.svg" width="140" alt="Ghost OS">
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/ghostwright/shadow"><img src="https://raw.githubusercontent.com/ghostwright/shadow/main/logo-animated.svg" width="140" alt="Shadow"></a>
 </p>
 
 <h1 align="center">Ghost OS</h1>
@@ -23,7 +23,7 @@ Ghost OS changes that. One install, and any AI agent can see and operate every a
 <table>
 <tr>
 <td width="120" align="center">
-<a href="https://github.com/ghostwright/shadow"><img src="https://raw.githubusercontent.com/ghostwright/shadow/main/logo.svg" width="80" alt="Shadow"></a>
+<a href="https://github.com/ghostwright/shadow"><img src="https://raw.githubusercontent.com/ghostwright/shadow/main/logo-animated.svg" width="80" alt="Shadow"></a>
 </td>
 <td>
 

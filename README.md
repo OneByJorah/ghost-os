@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="logo-animated.svg" width="140" alt="Ghost OS">
+  <img src="logo-animated.svg" width="180" alt="Ghost OS">
   &nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/ghostwright/shadow"><img src="https://raw.githubusercontent.com/ghostwright/shadow/main/logo-animated.svg" width="140" alt="Shadow"></a>
+  <a href="https://github.com/ghostwright/shadow"><img src="https://raw.githubusercontent.com/ghostwright/shadow/main/logo-animated.svg" width="180" alt="Shadow"></a>
 </p>
 
 <h1 align="center">Ghost OS</h1>

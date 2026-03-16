@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="logo-animated.gif" width="140" alt="Ghost OS">
+  <img src="logo-animated.gif" width="120" alt="Ghost OS">
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/ghostwright/shadow"><img src="https://raw.githubusercontent.com/ghostwright/shadow/main/logo.svg" width="120" alt="Shadow"></a>
 </p>
 
 <h1 align="center">Ghost OS</h1>
@@ -18,13 +20,24 @@ Your AI agent can write code, run tests, search files. But it can't click a butt
 
 Ghost OS changes that. One install, and any AI agent can see and operate every app on your Mac.
 
-### Meet Shadow
+<table>
+<tr>
+<td width="120" align="center">
+<a href="https://github.com/ghostwright/shadow"><img src="https://raw.githubusercontent.com/ghostwright/shadow/main/logo.svg" width="80" alt="Shadow"></a>
+</td>
+<td>
+
+### Meet [Shadow](https://github.com/ghostwright/shadow)
 
 Shadow is the other half of the story. Ghost OS gives AI agents eyes and hands on your Mac. Shadow gives them memory and intelligence.
 
 14-modality capture. Proactive suggestions. Episode generation. On-device LLM inference. Computer-use training data. All local, all open source.
 
-**[ghostwright/shadow](https://github.com/ghostwright/shadow)** — Your computer was paying attention the whole time.
+*Your computer was paying attention the whole time.*
+
+</td>
+</tr>
+</table>
 
 ---
 

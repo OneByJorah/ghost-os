@@ -18,6 +18,16 @@ Your AI agent can write code, run tests, search files. But it can't click a butt
 
 Ghost OS changes that. One install, and any AI agent can see and operate every app on your Mac.
 
+### Meet Shadow
+
+Shadow is the other half of the story. Ghost OS gives AI agents eyes and hands on your Mac. Shadow gives them memory and intelligence.
+
+14-modality capture. Proactive suggestions. Episode generation. On-device LLM inference. Computer-use training data. All local, all open source.
+
+**[ghostwright/shadow](https://github.com/ghostwright/shadow)** — Your computer was paying attention the whole time.
+
+---
+
 ### What's New &nbsp; <img src="https://img.shields.io/badge/v2.2.1-March%202026-brightgreen.svg" alt="v2.2.1">
 
 **Self-learning recipes.** Show Ghost OS how to do something once, and it remembers forever.

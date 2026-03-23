@@ -1,7 +1,9 @@
 <p align="center">
-  <img src="logo-animated.svg" width="180" alt="Ghost OS">
-  &nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/ghostwright/shadow"><img src="https://raw.githubusercontent.com/ghostwright/shadow/main/logo-animated.svg" width="180" alt="Shadow"></a>
+  <img src="logo-animated.svg" width="160" alt="Ghost OS">
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/ghostwright/shadow"><img src="https://raw.githubusercontent.com/ghostwright/shadow/main/logo-animated.svg" width="160" alt="Shadow"></a>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/ghostwright/specter"><img src="https://raw.githubusercontent.com/ghostwright/specter/main/logo-animated.svg" width="160" alt="Specter"></a>
 </p>
 
 <h1 align="center">Ghost OS</h1>
@@ -19,6 +21,25 @@
 Your AI agent can write code, run tests, search files. But it can't click a button, send an email, or fill out a form. It lives inside a chat box.
 
 Ghost OS changes that. One install, and any AI agent can see and operate every app on your Mac.
+
+<table>
+<tr>
+<td width="120" align="center">
+<a href="https://github.com/ghostwright/specter"><img src="https://raw.githubusercontent.com/ghostwright/specter/main/logo-animated.svg" width="80" alt="Specter"></a>
+</td>
+<td>
+
+### Meet [Specter](https://github.com/ghostwright/specter)
+
+Ghost OS gives AI agents eyes and hands. Shadow gives them memory. Specter gives them a home.
+
+Deploy persistent AI agents to dedicated VMs in 90 seconds. Automatic DNS, TLS, systemd hardening. Interactive TUI dashboard. You own the infrastructure.
+
+*AI agents that earn your trust.*
+
+</td>
+</tr>
+</table>
 
 <table>
 <tr>

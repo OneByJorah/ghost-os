@@ -40,7 +40,7 @@ import sys
 import tempfile
 import time
 import traceback
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from threading import Lock, Timer
 
@@ -142,7 +142,7 @@ def _load_vlm():
             # requires PyTorch tensors which MLX doesn't provide.
             from transformers import Qwen2VLImageProcessor
             _vlm_processor.image_processor = Qwen2VLImageProcessor.from_pretrained(
-                MODEL_PATH, use_fast=False
+                MODEL_PATH, use_fast=False,
             )
 
             from transformers import AutoTokenizer
@@ -205,10 +205,10 @@ def _vlm_ground(image_path: str, description: str, screen_w: float, screen_h: fl
     # Build chat template
     chat = [{"role": "user", "content": [
         {"type": "image", "image": resized_path},
-        {"type": "text", "text": prompt}
+        {"type": "text", "text": prompt},
     ]}]
     formatted = _vlm_tokenizer.apply_chat_template(
-        chat, tokenize=False, add_generation_prompt=True
+        chat, tokenize=False, add_generation_prompt=True,
     )
 
     # Run inference
@@ -218,9 +218,9 @@ def _vlm_ground(image_path: str, description: str, screen_w: float, screen_h: fl
         _vlm_model, _vlm_processor, formatted,
         image=resized_path,
         max_tokens=128,
-        temp=0.0
+        temp=0.0,
     ):
-        full_text += result.text if hasattr(result, 'text') else str(result)
+        full_text += result.text if hasattr(result, "text") else str(result)
 
     elapsed = time.time() - t0
     log(f"VLM '{description}' -> '{full_text.strip()}' ({elapsed:.1f}s)")
@@ -232,7 +232,7 @@ def _vlm_ground(image_path: str, description: str, screen_w: float, screen_h: fl
         pass
 
     # Parse [x, y] or (x, y) coordinates from model output
-    match = re.search(r'[\(\[]\s*([\d.]+)\s*,\s*([\d.]+)\s*[\)\]]', full_text)
+    match = re.search(r"[\(\[]\s*([\d.]+)\s*,\s*([\d.]+)\s*[\)\]]", full_text)
     if match:
         nx, ny = float(match.group(1)), float(match.group(2))
         if nx <= 1.0 and ny <= 1.0:

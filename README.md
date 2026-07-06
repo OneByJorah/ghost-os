@@ -274,7 +274,7 @@ Ghost OS MCP Server (Swift)
     └── AXorcist ────── macOS accessibility engine
 ```
 
-~7,000 lines of Swift + Python vision sidecar. Built on [AXorcist](https://github.com/steipete/AXorcist) by [@steipete](https://github.com/steipete).
+~8,950 lines of Swift + Python vision sidecar. Built on [AXorcist](https://github.com/steipete/AXorcist) by [@steipete](https://github.com/steipete).
 
 ## Contributing
 

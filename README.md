@@ -288,6 +288,17 @@ Thanks to everyone who has contributed to Ghost OS.
   <img src="https://contrib.rocks/image?repo=ghostwright/ghost-os" />
 </a>
 
+## 🔀 Fork Notes
+
+This repository is a fork of [ghostwright/ghost-os](https://github.com/ghostwright/ghost-os) maintained by **OneByJorah**.
+
+**Changes from upstream:**
+- Added `.env.example` with macOS-specific notes
+- **No Dockerfile** — Ghost OS is a native macOS application (Swift 6.2+, macOS 14+)
+  that requires the macOS accessibility tree and cannot be containerized on Linux.
+  Install via `brew install ghostwright/ghost-os/ghost-os` or build from source with `swift build`.
+- Vision sidecar (Python) runs alongside the Swift MCP server
+
 ## License
 
 MIT

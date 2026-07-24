@@ -1,29 +1,25 @@
 <div align="center">
-  <img src="https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white">
-  <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white">
-  <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge">
-</div>
 
-<br>
+![ghost-os banner](docs/assets/banner.svg)
 
-<div align="center">
-  <h1>ghost-os</h1>
-  <p><strong>Full Computer-Use for AI Agents</strong></p>
-  <p>Self-learning workflows. Native macOS. No screenshots required.</p>
-  <p>
-    <a href="#features">Features</a> •
-    <a href="#quick-start">Quick Start</a> •
-    <a href="#tools">Tools</a> •
-    <a href="#contributing">Contributing</a>
-  </p>
+# ghost-os
+
+Full computer-use for AI agents
+
+![License](https://img.shields.io/badge/license-MIT-brightgreen)
+![Language](https://img.shields.io/badge/language-Swift-blue)
+![Fork](https://img.shields.io/badge/status-fork-orange)
 </div>
 
 ---
 
-## Screenshot
+<p align="center">
+  <img src="docs/assets/screenshot.png" alt="ghost-os preview" width="90%">
+</p>
 
-![ghost-os Interface](docs/screenshot.png)
-*AI agents performing computer-use tasks on macOS.*
+<br>
+
+---
 
 ## Features
 
@@ -52,7 +48,6 @@ cd ghost-os
 
 pip install -r requirements.txt
 
-# Grant accessibility permissions
 python3 setup.py setup-accessibility
 
 # Run the agent
@@ -140,7 +135,18 @@ MIT © Jhonattan L. Jimenez
 
 ---
 
-<div align="center">
-  <p>Full computer-use for AI agents on macOS.</p>
-  <p><a href="https://github.com/OneByJorah">@OneByJorah</a></p>
-</div>
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). All contributions follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## 🔒 Security
+
+Found a vulnerability? Please follow our [Security Policy](SECURITY.md) and report privately to `security@jorahone.com`.
+
+## 📄 License
+
+[MIT License](LICENSE) © Jhonattan L. Jimenez (OneByJorah)
+
+---
+
+<p align="center">Built with 🌴 by <a href="https://github.com/OneByJorah">OneByJorah</a> · <a href="https://jorahone.com">jorahone.com</a></p>
